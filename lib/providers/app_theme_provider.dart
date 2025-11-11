@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:todays_tasks/caching/shared_prefs.dart';
 
 class AppThemeProvider extends ChangeNotifier {
-  ThemeMode themeMode = ThemeMode.light;
+  ThemeMode themeMode =
+      SharedPrefs.getData(key: "theme") != null
+          ? SharedPrefs.getData(key: "theme") == "light"
+              ? ThemeMode.light
+              : ThemeMode.dark
+          : ThemeMode.light;
 
   void changeTheme(ThemeMode theme) {
     if (themeMode == theme) {
