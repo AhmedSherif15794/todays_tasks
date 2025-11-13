@@ -3,8 +3,8 @@ import 'package:todays_tasks/caching/shared_prefs.dart';
 
 class AppThemeProvider extends ChangeNotifier {
   ThemeMode themeMode =
-      SharedPrefs.getData(key: "theme") != null
-          ? SharedPrefs.getData(key: "theme") == "light"
+      SharedPrefs.getPrefs().getData(key: "theme") != null
+          ? SharedPrefs.getPrefs().getData(key: "theme") == "light"
               ? ThemeMode.light
               : ThemeMode.dark
           : ThemeMode.light;
