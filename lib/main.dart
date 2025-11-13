@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:todays_tasks/caching/shared_prefs.dart';
-import 'package:todays_tasks/home/home_view.dart';
+import 'package:todays_tasks/UI/home/home_view.dart';
 import 'package:todays_tasks/providers/app_language_provider.dart';
 import 'package:todays_tasks/providers/app_theme_provider.dart';
 import 'package:todays_tasks/utils/app_routes.dart';
