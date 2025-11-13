@@ -1,4 +1,7 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:todays_tasks/caching/shared_prefs.dart';
 import 'package:todays_tasks/home/home_view.dart';
@@ -11,6 +14,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SharedPrefs.init();
+  await ScreenUtil.ensureScreenSize();
   runApp(
     MultiProvider(
       providers: [
@@ -29,21 +33,27 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     var themeProvider = Provider.of<AppThemeProvider>(context);
     var languageProvider = Provider.of<AppLanguageProvider>(context);
-    return MaterialApp(
-      title: "Todays Tasks",
-      // routes
-      routes: {AppRoutes.homeView: (context) => HomeView()},
-      initialRoute: AppRoutes.homeView,
+    return ScreenUtilInit(
+      designSize: Size(411.4, 866.3),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder:
+          (context, child) => MaterialApp(
+            title: "Todays Tasks",
+            // routes
+            routes: {AppRoutes.homeView: (context) => HomeView()},
+            initialRoute: AppRoutes.homeView,
 
-      // Theme
-      themeMode: themeProvider.themeMode,
-      theme: AppTheme.lightTheme,
-      darkTheme: AppTheme.darkTheme,
+            // Theme
+            themeMode: themeProvider.themeMode,
+            theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
 
-      // localization
-      locale: languageProvider.appLocale,
-      localizationsDelegates: AppLocalizations.localizationsDelegates,
-      supportedLocales: AppLocalizations.supportedLocales,
+            // localization
+            locale: languageProvider.appLocale,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+          ),
     );
   }
 }
