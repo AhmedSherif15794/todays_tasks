@@ -1,5 +1,18 @@
 {
-    "welcome_to_todays_tasks" : "مرحبًا بك في المهام اليومية !!",
-    "todays_tasks" : "المهام اليومية"
-
+    "welcome_to_todays_tasks" : "مرحبًا بك في تطبيق مهام اليوم!",
+    "todays_tasks" : "مهام اليوم",
+    "structure_your_thoughts_and_precisely_prioritize_your_daily_goals" : "نظّم أفكارك وحدد أولويات أهدافك اليومية بدقة.📃",
+    "instantly_record_fleeting_ideas_and_notes_to_review_later"  : "دوّن أفكارك السريعة وملاحظاتك فورًا لمراجعتها لاحقًا.💡",
+    "clearly_track_your_progress_and_achieve_your_goals_step_by_step"  :  "تابع تقدمك بوضوح وحقق أهدافك خطوة بخطوة.📈",
+    "whats_your_name"  :  "ما اسمك؟",
+    "enter_your_name"  :  "اكتب اسمك هنا",
+    "please_enter_your_name"  :  "من فضلك أدخل اسمك!",
+    "choose_your_settings"  :  "اختر إعداداتك",
+    "theme"  :  "المظهر",
+    "language"  :  "اللغة",
+    "dark"  :  "داكن",
+    "light"  :  "فاتح",
+    "arabic"  :  "العربية",
+    "english"  :  "الإنجليزية",
+    "lets_start"  :  "لنبدأ!"
 }

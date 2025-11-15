@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:todays_tasks/UI/onboarding/onboarding_view.dart';
 import 'package:todays_tasks/caching/shared_prefs.dart';
 import 'package:todays_tasks/UI/home/home_view.dart';
 import 'package:todays_tasks/providers/app_language_provider.dart';
@@ -39,8 +40,11 @@ class MyApp extends StatelessWidget {
           (context, child) => MaterialApp(
             title: "Todays Tasks",
             // routes
-            routes: {AppRoutes.homeView: (context) => HomeView()},
-            initialRoute: AppRoutes.homeView,
+            routes: {
+              AppRoutes.homeView: (context) => HomeView(),
+              AppRoutes.onboarding: (context) => OnboardingView(),
+            },
+            initialRoute: AppRoutes.onboarding,
 
             // Theme
             themeMode: themeProvider.themeMode,

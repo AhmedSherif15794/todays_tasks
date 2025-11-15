@@ -8,6 +8,7 @@ class AppThemeProvider extends ChangeNotifier {
               ? ThemeMode.light
               : ThemeMode.dark
           : ThemeMode.light;
+  // ThemeMode.light;
 
   void changeTheme(ThemeMode theme) {
     if (themeMode == theme) {
