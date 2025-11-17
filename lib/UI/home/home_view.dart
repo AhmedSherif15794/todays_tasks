@@ -12,7 +12,6 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     var themeProvider = Provider.of<AppThemeProvider>(context);
     var languageProvider = Provider.of<AppLanguageProvider>(context);
-    // var languageProvider = Provider.of<AppLanguageProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.todays_tasks),
@@ -23,10 +22,10 @@ class HomeView extends StatelessWidget {
             onPressed: () {
               if (themeProvider.isDarkMode()) {
                 themeProvider.changeTheme(ThemeMode.light);
-                SharedPrefs.setData(key: "theme", value: "light");
+                SharedPrefs.getPrefs().setData(key: "theme", value: "light");
               } else {
                 themeProvider.changeTheme(ThemeMode.dark);
-                SharedPrefs.setData(key: "theme", value: "dark");
+                SharedPrefs.getPrefs().setData(key: "theme", value: "dark");
               }
             },
             icon: Icon(Icons.color_lens_outlined),
@@ -36,10 +35,10 @@ class HomeView extends StatelessWidget {
             onPressed: () {
               if (languageProvider.isArabic()) {
                 languageProvider.changeLanguage(languageCode: 'en');
-                SharedPrefs.setData(key: "language", value: "en");
+                SharedPrefs.getPrefs().setData(key: "language", value: "en");
               } else {
                 languageProvider.changeLanguage(languageCode: 'ar');
-                SharedPrefs.setData(key: "language", value: "ar");
+                SharedPrefs.getPrefs().setData(key: "language", value: "ar");
               }
             },
             icon: Icon(Icons.language_outlined),

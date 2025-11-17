@@ -1,4 +1,20 @@
 {
     "welcome_to_todays_tasks" : "Welcome To Todays Tasks!!!",
-    "todays_tasks" : "Todays Tasks"
+    "todays_tasks" : "Todays Tasks",
+    "structure_your_thoughts_and_precisely_prioritize_your_daily_goals" : "Structure your thoughts and precisely prioritize your daily goals.📃",
+    "instantly_record_fleeting_ideas_and_notes_to_review_later"  : "Instantly record fleeting ideas and notes to review later.💡",
+    "clearly_track_your_progress_and_achieve_your_goals_step_by_step"  :  "Clearly track your progress and achieve your goals step-by-step.📈",
+    "whats_your_name"  :  "What's Your Name?",
+    "enter_your_name"  :  "Enter your name here",
+    "please_enter_your_name"  :  "Please enter your name!!",
+    "choose_your_settings"  :  "Choose Your Settings",
+    "theme"  :  "Theme",
+    "language"  :  "Language",
+    "dark"  :  "Dark",
+    "light"  :  "Light",
+    "arabic"  :  "Arabic",
+    "english"  :  "English",
+    "lets_start"  :  "Let's Start!"
+
+
 }
