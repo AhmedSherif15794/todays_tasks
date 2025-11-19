@@ -6,7 +6,7 @@ import 'package:todays_tasks/utils/app_styles.dart';
 
 class AppTheme {
   // light
-  static ThemeData lightTheme = ThemeData(
+  static ThemeData lightTheme() => ThemeData(
     scaffoldBackgroundColor: AppColors.lightBackgroundColor,
     primaryColor: AppColors.lightPrimaryColor,
     primaryColorDark: AppColors.lightTextPrimaryColor,
@@ -45,24 +45,26 @@ class AppTheme {
       //   borderColor: AppColors.red,
       //   radius: 8.r,
       // ),
-      hintStyle: AppStyles.medium16LightGrey.copyWith(color: AppColors.border),
+      hintStyle: AppStyles.medium16LightGrey().copyWith(
+        color: AppColors.border,
+      ),
     ),
 
     textTheme: TextTheme(
-      headlineLarge: AppStyles.bold24Black,
-      headlineMedium: AppStyles.bold20Black,
-      headlineSmall: AppStyles.bold16Black,
-      bodyLarge: AppStyles.medium20Black,
-      bodyMedium: AppStyles.medium18Black,
-      bodySmall: AppStyles.medium16Black,
-      labelLarge: AppStyles.medium22LightGrey,
-      labelMedium: AppStyles.medium20LightGrey,
-      labelSmall: AppStyles.medium16LightGrey,
+      headlineLarge: AppStyles.bold24Black(),
+      headlineMedium: AppStyles.bold20Black(),
+      headlineSmall: AppStyles.bold16Black(),
+      bodyLarge: AppStyles.medium20Black(),
+      bodyMedium: AppStyles.medium18Black(),
+      bodySmall: AppStyles.medium16Black(),
+      labelLarge: AppStyles.medium22LightGrey(),
+      labelMedium: AppStyles.medium20LightGrey(),
+      labelSmall: AppStyles.medium16LightGrey(),
     ),
   );
 
   // dark
-  static ThemeData darkTheme = ThemeData(
+  static ThemeData darkTheme() => ThemeData(
     scaffoldBackgroundColor: AppColors.darkBackgroundColor,
     primaryColor: AppColors.darkPrimaryColor,
     primaryColorDark: AppColors.darkTextPrimaryColor,
@@ -99,19 +101,19 @@ class AppTheme {
       //   borderColor: AppColors.red,
       //   radius: 8.r,
       // ),
-      hintStyle: AppStyles.medium16darkGrey,
+      hintStyle: AppStyles.medium16darkGrey(),
     ),
 
     textTheme: TextTheme(
-      headlineLarge: AppStyles.bold24White,
-      headlineMedium: AppStyles.bold20White,
-      headlineSmall: AppStyles.bold16White,
-      bodyLarge: AppStyles.medium20White,
-      bodyMedium: AppStyles.medium18White,
-      bodySmall: AppStyles.medium16White,
-      labelLarge: AppStyles.medium22darkGrey,
-      labelMedium: AppStyles.medium20darkGrey,
-      labelSmall: AppStyles.medium16darkGrey,
+      headlineLarge: AppStyles.bold24White(),
+      headlineMedium: AppStyles.bold20White(),
+      headlineSmall: AppStyles.bold16White(),
+      bodyLarge: AppStyles.medium20White(),
+      bodyMedium: AppStyles.medium18White(),
+      bodySmall: AppStyles.medium16White(),
+      labelLarge: AppStyles.medium22darkGrey(),
+      labelMedium: AppStyles.medium20darkGrey(),
+      labelSmall: AppStyles.medium16darkGrey(),
     ),
   );
 }

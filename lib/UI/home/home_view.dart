@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -20,6 +22,7 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     // var themeProvider = Provider.of<AppThemeProvider>(context);
     // var languageProvider = Provider.of<AppLanguageProvider>(context);
+    log("orientation = ${MediaQuery.of(context).orientation}");
     return Scaffold(
       // appBar: AppBar(
       //   title: Text(AppLocalizations.of(context)!.todays_tasks),
@@ -60,7 +63,7 @@ class _HomeViewState extends State<HomeView> {
             padding: EdgeInsets.all(32.r),
             child: Column(
               spacing: 16.h,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // welcome text
                 BlocSelector<HomeViewModel, HomeStates, HomeInitialState>(

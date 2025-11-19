@@ -36,30 +36,39 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     var themeProvider = Provider.of<AppThemeProvider>(context);
     var languageProvider = Provider.of<AppLanguageProvider>(context);
+
     return ScreenUtilInit(
-      designSize: Size(411.4, 866.3),
+      designSize: Size(392.7, 803.6),
       minTextAdapt: true,
       splitScreenMode: true,
+      useInheritedMediaQuery: true,
+
       builder:
-          (context, child) => MaterialApp(
-            title: "Todays Tasks",
-            // routes
-            routes: {
-              AppRoutes.homeView: (context) => HomeView(),
-              AppRoutes.onboarding: (context) => OnboardingView(),
-            },
-            initialRoute:
-                isOnboardingOpened ? AppRoutes.homeView : AppRoutes.onboarding,
+          (context, child) => OrientationBuilder(
+            builder:
+                (context, orientation) => MaterialApp(
+                  title: "Todays Tasks",
+                  // routes
+                  routes: {
+                    AppRoutes.homeView: (context) => HomeView(),
+                    AppRoutes.onboarding: (context) => OnboardingView(),
+                  },
+                  initialRoute:
+                      isOnboardingOpened
+                          ? AppRoutes.homeView
+                          : AppRoutes.onboarding,
 
-            // Theme
-            themeMode: themeProvider.themeMode,
-            theme: AppTheme.lightTheme,
-            darkTheme: AppTheme.darkTheme,
+                  // Theme
+                  themeMode: themeProvider.themeMode,
+                  theme: AppTheme.lightTheme(),
+                  darkTheme: AppTheme.darkTheme(),
 
-            // localization
-            locale: languageProvider.appLocale,
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
+                  // localization
+                  locale: languageProvider.appLocale,
+                  localizationsDelegates:
+                      AppLocalizations.localizationsDelegates,
+                  supportedLocales: AppLocalizations.supportedLocales,
+                ),
           ),
     );
   }
