@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:todays_tasks/UI/create_task/create_task_view.dart';
+import 'package:todays_tasks/UI/home/cubit/home_view_model.dart';
 import 'package:todays_tasks/UI/onboarding/onboarding_view.dart';
 import 'package:todays_tasks/caching/shared_prefs.dart';
 import 'package:todays_tasks/UI/home/home_view.dart';
+import 'package:todays_tasks/data/tasks/ds/local_ds/tasks_local_ds_impl.dart';
+import 'package:todays_tasks/data/tasks/repository/tasks_repo_impl.dart';
+import 'package:todays_tasks/models/task_model.dart';
 import 'package:todays_tasks/providers/app_language_provider.dart';
 import 'package:todays_tasks/providers/app_theme_provider.dart';
 import 'package:todays_tasks/utils/app_routes.dart';
@@ -17,6 +24,9 @@ void main() async {
   await SharedPrefs.init();
   await ScreenUtil.ensureScreenSize();
   Bloc.observer = MyBlocObserver();
+  final savingFolder = await getApplicationDocumentsDirectory();
+  Hive.init(savingFolder.path);
+  Hive.registerAdapter(TaskModelAdapter());
   runApp(
     MultiProvider(
       providers: [
@@ -28,6 +38,7 @@ void main() async {
   );
 }
 
+// ignore: must_be_immutable
 class MyApp extends StatelessWidget {
   MyApp({super.key});
   bool isOnboardingOpened =
@@ -46,28 +57,37 @@ class MyApp extends StatelessWidget {
       builder:
           (context, child) => OrientationBuilder(
             builder:
-                (context, orientation) => MaterialApp(
-                  title: "Todays Tasks",
-                  // routes
-                  routes: {
-                    AppRoutes.homeView: (context) => HomeView(),
-                    AppRoutes.onboarding: (context) => OnboardingView(),
-                  },
-                  initialRoute:
-                      isOnboardingOpened
-                          ? AppRoutes.homeView
-                          : AppRoutes.onboarding,
+                (context, orientation) => BlocProvider(
+                  create:
+                      (context) => HomeViewModel(
+                        tasksRepo: TasksRepoImpl(
+                          tasksLocalDS: TasksLocalDsImpl(),
+                        ),
+                      ),
+                  child: MaterialApp(
+                    title: "Todays Tasks",
+                    // routes
+                    routes: {
+                      AppRoutes.homeView: (context) => HomeView(),
+                      AppRoutes.onboarding: (context) => OnboardingView(),
+                      AppRoutes.createTask: (context) => CreateTaskView(),
+                    },
+                    initialRoute:
+                        isOnboardingOpened
+                            ? AppRoutes.homeView
+                            : AppRoutes.onboarding,
 
-                  // Theme
-                  themeMode: themeProvider.themeMode,
-                  theme: AppTheme.lightTheme(),
-                  darkTheme: AppTheme.darkTheme(),
+                    // Theme
+                    themeMode: themeProvider.themeMode,
+                    theme: AppTheme.lightTheme(),
+                    darkTheme: AppTheme.darkTheme(),
 
-                  // localization
-                  locale: languageProvider.appLocale,
-                  localizationsDelegates:
-                      AppLocalizations.localizationsDelegates,
-                  supportedLocales: AppLocalizations.supportedLocales,
+                    // localization
+                    locale: languageProvider.appLocale,
+                    localizationsDelegates:
+                        AppLocalizations.localizationsDelegates,
+                    supportedLocales: AppLocalizations.supportedLocales,
+                  ),
                 ),
           ),
     );

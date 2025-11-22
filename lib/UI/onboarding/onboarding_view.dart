@@ -50,7 +50,7 @@ class _OnboardingViewState extends State<OnboardingView>
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
-                  spacing: 26.h,
+                  spacing: 14.h,
                   children: [
                     SizedBox(),
                     // Image
@@ -66,7 +66,7 @@ class _OnboardingViewState extends State<OnboardingView>
                     ),
 
                     Text(
-                      'Organize your daily tasks, capture ideas instsntly, and track your progress clearly.',
+                      AppLocalizations.of(context)!.onboarding_subtitle,
                       style: Theme.of(context).textTheme.labelSmall,
                       textAlign: TextAlign.center,
                     ),
@@ -84,11 +84,12 @@ class _OnboardingViewState extends State<OnboardingView>
                           crossAxisAlignment: CrossAxisAlignment.start,
                           spacing: 12.h,
                           children: [
+                            // name
                             Text(
                               AppLocalizations.of(context)!.name,
                               style: Theme.of(context).textTheme.bodyMedium!,
                             ),
-
+                            // enter your name
                             TextFormField(
                               controller: viewModel.nameController,
                               style: Theme.of(context).textTheme.bodyMedium,

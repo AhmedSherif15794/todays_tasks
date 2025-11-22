@@ -30,24 +30,26 @@ class AppTheme {
     inputDecorationTheme: InputDecorationTheme(
       contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
       border: AppFunctions.inputBorder(
-        borderColor: AppColors.border,
+        borderColor: AppColors.darkTextSecondaryColor,
         radius: 12.r,
       ),
       enabledBorder: AppFunctions.inputBorder(
-        borderColor: AppColors.border,
+        borderColor: AppColors.darkTextSecondaryColor,
         radius: 12.r,
       ),
       focusedBorder: AppFunctions.inputBorder(
-        borderColor: AppColors.border,
+        borderColor: AppColors.lightTextSecondaryColor,
         radius: 12.r,
       ),
       // errorBorder: AppFunctions.inputBorder(
       //   borderColor: AppColors.red,
       //   radius: 8.r,
       // ),
-      hintStyle: AppStyles.medium16LightGrey().copyWith(
-        color: AppColors.border,
-      ),
+      hintStyle: AppStyles.medium16LightGrey(),
+    ),
+
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: AppColors.lightPrimaryColor,
     ),
 
     textTheme: TextTheme(
