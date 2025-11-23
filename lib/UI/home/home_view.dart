@@ -54,7 +54,8 @@ class _HomeViewState extends State<HomeView> {
 
       floatingActionButton: BlocBuilder<HomeViewModel, HomeStates>(
         builder: (context, state) {
-          if (viewModel.selectedDate.day >= DateTime.now().day) {
+          if (viewModel.selectedDate.day == DateTime.now().day ||
+              viewModel.selectedDate.isAfter(DateTime.now())) {
             return FloatingActionButton(
               onPressed: () {
                 // navigator to create task
