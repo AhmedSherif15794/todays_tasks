@@ -90,8 +90,27 @@ class HomeViewModel extends Cubit<HomeStates> {
     }
   }
 
-  void checkboxPressedTask(TaskModel task) {
-    task.isCompleted = !task.isCompleted!;
+  void checkboxPressedTask(TaskModel task) async {
+    var box = await Hive.openBox('tasks');
+    // the whole list of the day
+    List<TaskModel> currentTasks =
+        box.get(task.date.day.toString()).cast<TaskModel>() ?? [];
+    // the task we need to edit
+    TaskModel myTask = currentTasks.firstWhere((element) {
+      return element.id == task.id;
+    });
+    // the index of the task
+    int index = currentTasks.indexOf(myTask);
+    // remove the task from the list
+    currentTasks.removeWhere((element) => element.id == task.id);
+    // edit the task
+    myTask.isCompleted = !myTask.isCompleted;
+    // add the task to the list at the same index
+    currentTasks.insert(index, myTask);
+    // add the currentTasks list to the box
+    box.put(task.date.day.toString(), currentTasks);
+    // task.isCompleted = !task.isCompleted;
+    log(myTask.isCompleted.toString());
     emit(TasksSuccessState(tasks: tasks));
   }
 }

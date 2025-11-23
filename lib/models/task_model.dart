@@ -3,6 +3,8 @@ part 'task_model.g.dart';
 
 @HiveType(typeId: 1)
 class TaskModel {
+  @HiveField(4)
+  int id = 0;
   @HiveField(0)
   String title;
   @HiveField(1)
@@ -10,12 +12,14 @@ class TaskModel {
   @HiveField(2)
   DateTime date;
   @HiveField(3)
-  bool? isCompleted;
+  bool isCompleted;
 
   TaskModel({
     required this.title,
     required this.date,
     this.description,
     this.isCompleted = false,
-  });
+  }) {
+    id++;
+  }
 }
