@@ -21,7 +21,8 @@ class TaskModelAdapter extends TypeAdapter<TaskModel> {
       date: fields[2] as DateTime,
       description: fields[1] as String?,
       isCompleted: fields[3] as bool,
-    )..id = fields[4] as int;
+      id: fields[4] as int,
+    );
   }
 
   @override
