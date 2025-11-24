@@ -51,9 +51,7 @@ class HomeViewModel extends Cubit<HomeStates> {
   void getTasks(DateTime date) async {
     try {
       emit(TasksLoadingState());
-      // tasks = await tasksRepo.getTasks(date);
-      var box = await Hive.openBox('tasks');
-      tasks = (box.get(date.day.toString())?.cast<TaskModel>()) ?? [];
+      tasks = await tasksRepo.getTasks(date);
       tasks.isEmpty
           ? emit(NoTasksState())
           : emit(TasksSuccessState(tasks: tasks));
@@ -66,51 +64,32 @@ class HomeViewModel extends Cubit<HomeStates> {
   void saveTask() async {
     emit(TasksLoadingState());
     if (formKey.currentState!.validate()) {
+      // the valid task
       TaskModel task = TaskModel(
         title: titleController.text,
         description: descriptionController.text,
         date: selectedDate,
+        id: IdGenerator.getNextId(),
       );
-      // tasksRepo.saveTask(task);
       try {
-        var box = await Hive.openBox("tasks");
-        List<TaskModel> currentTasks =
-            (box.get(task.date.day.toString())?.cast<TaskModel>()) ?? [];
-        currentTasks.add(task);
-        await box.put(task.date.day.toString(), currentTasks);
+        // save the task
+        tasksRepo.saveTask(task);
         emit(TaskSuccessSavedState());
-
-        log("create Task view model${tasksRepo.getTasks(task.date)}");
         getTasks(task.date);
-        // emit(TasksSuccessState(tasks: tasks));
       } catch (e) {
-        log(e.toString());
-        rethrow;
+        emit(TasksErrorState(errorMessage: e.toString()));
       }
     }
   }
 
   void checkboxPressedTask(TaskModel task) async {
-    var box = await Hive.openBox('tasks');
-    // the whole list of the day
-    List<TaskModel> currentTasks =
-        box.get(task.date.day.toString()).cast<TaskModel>() ?? [];
-    // the task we need to edit
-    TaskModel myTask = currentTasks.firstWhere((element) {
-      return element.id == task.id;
-    });
-    // the index of the task
-    int index = currentTasks.indexOf(myTask);
-    // remove the task from the list
-    currentTasks.removeWhere((element) => element.id == task.id);
-    // edit the task
-    myTask.isCompleted = !myTask.isCompleted;
-    // add the task to the list at the same index
-    currentTasks.insert(index, myTask);
-    // add the currentTasks list to the box
-    box.put(task.date.day.toString(), currentTasks);
-    // task.isCompleted = !task.isCompleted;
-    log(myTask.isCompleted.toString());
-    emit(TasksSuccessState(tasks: tasks));
+    tasksRepo.editTasks(
+      task: task,
+      title: task.title,
+      description: task.description ?? '',
+      isCompleted: !task.isCompleted,
+    );
+    log("is completed  ? ${task.isCompleted}");
+    getTasks(task.date);
   }
 }

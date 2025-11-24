@@ -30,14 +30,16 @@ class _HomeViewState extends State<HomeView> {
     super.initState();
   }
 
-  void del() async {
+  void deleteAll() async {
     var box = await Hive.openBox('tasks');
-    box.delete(viewModel.selectedDate.day.toString());
+    // box.delete(viewModel.selectedDate.day.toString());
+    box.deleteFromDisk();
   }
 
   @override
   Widget build(BuildContext context) {
-    // del();
+    // SharedPrefs.getPrefs().deleteKey('counter');
+    // deleteAll();
     return Scaffold(
       drawer: HomeDrawer(),
 

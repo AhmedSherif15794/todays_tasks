@@ -6,8 +6,18 @@ class TasksRepoImpl implements TasksRepo {
   TasksLocalDS tasksLocalDS;
   TasksRepoImpl({required this.tasksLocalDS});
   @override
-  void editTasks(DateTime date) {
-    // TODO: implement editTasks
+  void editTasks({
+    required TaskModel task,
+    required String title,
+    required String description,
+    required bool isCompleted,
+  }) async {
+    tasksLocalDS.editTasks(
+      task: task,
+      title: title,
+      description: description,
+      isCompleted: isCompleted,
+    );
   }
 
   @override
