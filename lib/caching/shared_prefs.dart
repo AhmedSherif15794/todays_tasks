@@ -31,4 +31,8 @@ class SharedPrefs {
   dynamic getData({required String key}) {
     return _prefs.get(key);
   }
+
+  void deleteKey(String key) async {
+    await _prefs.remove(key);
+  }
 }
