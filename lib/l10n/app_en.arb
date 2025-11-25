@@ -10,6 +10,7 @@
     "enter_your_name"  :  "Enter your name",
     "please_enter_your_name"  :  "Please enter your name!!",
     "choose_your_settings"  :  "Choose Your Settings",
+    "go_to_home"  :  "Go To Home",
     "good_morning"  :  "Good Morning",
     "good_afternoon"  :  "Good Afternoon",
     "good_evening"  :  "Good Evening",
@@ -20,6 +21,11 @@
     "arabic"  :  "Arabic",
     "english"  :  "English",
     "name"  :  "Name",
+    "cancel"  :  "Cancel",
+    "save"  :  "Save",
+    "edit"  :  "Edit",
+    "delete"  :  "Delete",
+    "edit_name"  :  "Edit Name",
     "lets_start"  :  "Let's Start!",
     "create_task" : "Create Task",
     "task_title" : "Task Title",
@@ -27,7 +33,9 @@
     "please_enter_task_title" : "Please enter the task title",
     "description" : "Description",
     "descripe_your_task" : "Descripe your task(optional)",
-    "save_task" : "Save Task"
+    "save_task" : "Save Task",
+    "save_edits" : "Save Edits",
+    "edit_task" : "Edit Task"
 
 
 }

@@ -4,7 +4,8 @@ abstract class HomeStates {}
 
 class HomeInitialState extends HomeStates {
   DateTime date;
-  HomeInitialState({required this.date});
+  String name;
+  HomeInitialState({required this.date, required this.name});
 }
 
 class HomeDateChangeState extends HomeStates {
@@ -18,6 +19,8 @@ class HomeShowThemeBottomSheetState extends HomeStates {}
 
 class HomeShowLanguageBottomSheetState extends HomeStates {}
 
+class ShowEditNameDialogState extends HomeStates {}
+
 class TasksStates extends HomeStates {}
 
 class NoTasksState extends TasksStates {}
@@ -27,11 +30,20 @@ class TasksSuccessState extends TasksStates {
   TasksSuccessState({required this.tasks});
 }
 
-class TaskSuccessSavedState extends TasksStates {}
-
 class TasksErrorState extends TasksStates {
   String errorMessage;
   TasksErrorState({required this.errorMessage});
 }
 
 class TasksLoadingState extends TasksStates {}
+
+class TaskSuccessSavedState extends HomeStates {}
+
+class TaskSuccessEditedState extends HomeStates {}
+
+class GoToEditView extends HomeStates {
+  TaskModel task;
+  GoToEditView({required this.task});
+}
+
+class GoTocreateView extends HomeStates {}

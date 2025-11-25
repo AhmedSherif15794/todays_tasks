@@ -6,13 +6,13 @@ class TasksRepoImpl implements TasksRepo {
   TasksLocalDS tasksLocalDS;
   TasksRepoImpl({required this.tasksLocalDS});
   @override
-  void editTasks({
+  void editTask({
     required TaskModel task,
     required String title,
     required String description,
     required bool isCompleted,
   }) async {
-    tasksLocalDS.editTasks(
+    tasksLocalDS.editTask(
       task: task,
       title: title,
       description: description,
@@ -28,5 +28,10 @@ class TasksRepoImpl implements TasksRepo {
   @override
   void saveTask(TaskModel task) {
     tasksLocalDS.saveTasks(task);
+  }
+
+  @override
+  void deleteTask(TaskModel task) {
+    tasksLocalDS.deleteTask(task);
   }
 }

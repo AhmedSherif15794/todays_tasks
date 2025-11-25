@@ -181,6 +181,137 @@ class HomeDrawer extends StatelessWidget {
                     ),
               );
             }
+            if (state is HomeDateChangeState) {
+              Navigator.pop(context);
+            }
+            if (state is ShowEditNameDialogState) {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    backgroundColor: Theme.of(context).cardColor,
+                    title: Text(
+                      AppLocalizations.of(context)!.edit_name,
+                      style: Theme.of(context).textTheme.headlineMedium,
+                    ),
+
+                    content: Column(
+                      spacing: 12.h,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          AppLocalizations.of(context)!.name,
+                          style: Theme.of(context).textTheme.bodyMedium!,
+                        ),
+                        // enter your name
+                        Form(
+                          key: viewModel.editNameFormKey,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(22.r),
+                              border: Border(
+                                bottom: BorderSide(
+                                  color: Theme.of(context).primaryColorDark,
+                                ),
+                                left: BorderSide(
+                                  color: Theme.of(context).primaryColorDark,
+                                ),
+                              ),
+                            ),
+                            child: TextFormField(
+                              controller: viewModel.editNameController,
+                              style: Theme.of(context).textTheme.bodyMedium,
+
+                              decoration: InputDecoration(
+                                hintText:
+                                    AppLocalizations.of(
+                                      context,
+                                    )!.enter_your_name,
+                                enabledBorder: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                                errorBorder: InputBorder.none,
+                              ),
+
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return AppLocalizations.of(
+                                    context,
+                                  )!.please_enter_your_name;
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    actions: [
+                      // save button
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16.w),
+                        child: TextButton(
+                          onPressed: () {
+                            // change name
+                            viewModel.editName(
+                              viewModel.editNameController.text,
+                            );
+                            Navigator.pop(context);
+                          },
+                          style: TextButton.styleFrom(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 16.w,
+                              vertical: 8.h,
+                            ),
+
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12.r),
+                              side: BorderSide(
+                                color: Theme.of(context).primaryColorDark,
+                              ),
+                            ),
+                          ),
+                          child: Text(
+                            AppLocalizations.of(context)!.save,
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        ),
+                      ),
+
+                      // cancek button
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16.w),
+                        child: TextButton(
+                          onPressed: () {
+                            // cancel
+                            viewModel.editNameController.clear();
+                            Navigator.pop(context);
+                          },
+                          style: TextButton.styleFrom(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 16.w,
+                              vertical: 8.h,
+                            ),
+
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12.r),
+                              side: BorderSide(
+                                color: Theme.of(context).primaryColorDark,
+                              ),
+                            ),
+                          ),
+                          child: Text(
+                            AppLocalizations.of(context)!.cancel,
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              );
+            }
           },
           child: Column(
             children: [
@@ -188,7 +319,7 @@ class HomeDrawer extends StatelessWidget {
               DrawerHeader(
                 child: Center(
                   child: Text(
-                    'Today\'s Tasks',
+                    AppLocalizations.of(context)!.todays_tasks,
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -197,6 +328,7 @@ class HomeDrawer extends StatelessWidget {
                   ),
                 ),
               ),
+
               // home
               ListTile(
                 leading: Icon(
@@ -204,13 +336,84 @@ class HomeDrawer extends StatelessWidget {
                   color: Theme.of(context).primaryColorDark,
                 ),
                 title: Text(
-                  'Go To Home',
+                  AppLocalizations.of(context)!.go_to_home,
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
                 onTap: () {
-                  // navigate to home
+                  // return to today
+                  viewModel.returnToToday();
+                },
+              ),
 
-                  Navigator.pop(context);
+              Divider(),
+
+              // name
+              BlocSelector<HomeViewModel, HomeStates, HomeInitialState>(
+                selector:
+                    (state) => HomeInitialState(
+                      date: DateTime.now(),
+                      name: SharedPrefs.getPrefs().getData(key: 'name'),
+                    ),
+                builder: (context, state) {
+                  return Column(
+                    children: [
+                      ListTile(
+                        leading: Icon(
+                          Icons.person_outline_outlined,
+                          color: Theme.of(context).primaryColorDark,
+                          size: 24.r,
+                        ),
+                        title:
+                        // name
+                        Text(
+                          AppLocalizations.of(context)!.name,
+                          style: Theme.of(context).textTheme.bodyLarge,
+                        ),
+                      ),
+
+                      // edit name
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16.w),
+                        child: TextButton(
+                          onPressed: () {
+                            // change name
+                            viewModel.showEditNameDialog();
+                          },
+
+                          child: Container(
+                            padding: EdgeInsets.all(8.r),
+
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(22.r),
+                              border: Border(
+                                bottom: BorderSide(
+                                  color: Theme.of(context).primaryColorDark,
+                                ),
+                                left: BorderSide(
+                                  color: Theme.of(context).primaryColorDark,
+                                ),
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  state.name,
+                                  style: Theme.of(context).textTheme.bodySmall!,
+                                ),
+                                Icon(
+                                  Icons.edit_outlined,
+                                  color: Theme.of(context).primaryColorDark,
+                                  size: 24.r,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
                 },
               ),
 

@@ -1,15 +1,16 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:todays_tasks/UI/home/cubit/home_states.dart';
 import 'package:todays_tasks/UI/home/cubit/home_view_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:todays_tasks/UI/home/widgets/home_drawer.dart';
 import 'package:todays_tasks/UI/home/widgets/task_widget.dart';
+import 'package:todays_tasks/caching/shared_prefs.dart';
+import 'package:todays_tasks/providers/app_language_provider.dart';
 import 'package:todays_tasks/utils/app_colors.dart';
 import 'package:todays_tasks/utils/app_routes.dart';
 
@@ -26,7 +27,6 @@ class _HomeViewState extends State<HomeView> {
   void initState() {
     viewModel = BlocProvider.of<HomeViewModel>(context, listen: false);
     viewModel.getTasks(viewModel.selectedDate);
-    log("Again");
     super.initState();
   }
 
@@ -40,192 +40,213 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     // SharedPrefs.getPrefs().deleteKey('counter');
     // deleteAll();
-    return Scaffold(
-      drawer: HomeDrawer(),
+    var languageProvider = Provider.of<AppLanguageProvider>(context);
+    return BlocListener<HomeViewModel, HomeStates>(
+      listener: (context, state) {
+        if (state is GoToEditView) {
+          Navigator.pushNamed(
+            context,
+            AppRoutes.editTask,
+            arguments: state.task,
+          );
+        }
+        if (state is GoTocreateView) {
+          Navigator.pushNamed(context, AppRoutes.createTask);
+        }
+      },
+      child: Scaffold(
+        drawer: HomeDrawer(),
 
-      appBar: AppBar(
-        iconTheme: IconThemeData(color: Theme.of(context).primaryColorDark),
-        backgroundColor: AppColors.transparent,
-        surfaceTintColor: AppColors.transparent,
-        centerTitle: true,
-        title: Text(
-          AppLocalizations.of(context)!.todays_tasks,
-          style: Theme.of(context).textTheme.bodyLarge,
+        appBar: AppBar(
+          iconTheme: IconThemeData(color: Theme.of(context).primaryColorDark),
+          backgroundColor: AppColors.transparent,
+          surfaceTintColor: AppColors.transparent,
+          centerTitle: true,
+          title: Text(
+            AppLocalizations.of(context)!.todays_tasks,
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
         ),
-      ),
 
-      floatingActionButton: BlocBuilder<HomeViewModel, HomeStates>(
-        builder: (context, state) {
-          if (viewModel.selectedDate.day == DateTime.now().day &&
-                  viewModel.selectedDate.month == DateTime.now().month &&
-                  viewModel.selectedDate.year == DateTime.now().year ||
-              viewModel.selectedDate.isAfter(DateTime.now())) {
-            return FloatingActionButton(
-              onPressed: () {
-                // navigator to create task
-                Navigator.pushNamed(context, AppRoutes.createTask);
-              },
-              backgroundColor: Theme.of(context).primaryColor,
-              child: Icon(
-                Icons.add,
-                color: Theme.of(context).cardColor,
-                size: 40.r,
-              ),
-            );
-          } else {
-            return SizedBox();
-          }
-        },
-      ),
-
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.all(32.r),
-          child: Column(
-            spacing: 16.h,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // welcome text
-              BlocSelector<HomeViewModel, HomeStates, HomeInitialState>(
-                selector: (state) {
-                  return HomeInitialState(date: DateTime.now());
+        floatingActionButton: BlocBuilder<HomeViewModel, HomeStates>(
+          builder: (context, state) {
+            if (viewModel.selectedDate.day == DateTime.now().day &&
+                    viewModel.selectedDate.month == DateTime.now().month &&
+                    viewModel.selectedDate.year == DateTime.now().year ||
+                viewModel.selectedDate.isAfter(DateTime.now())) {
+              return FloatingActionButton(
+                onPressed: () {
+                  // navigator to create task
+                  viewModel.onFABTap();
                 },
-                builder: (context, state) {
-                  if (state.date.hour > 0 && state.date.hour < 12) {
-                    return Text(
-                      "${AppLocalizations.of(context)!.good_morning}, \n${viewModel.name}",
-                      style: Theme.of(context).textTheme.headlineLarge,
-                    );
-                  } else if (state.date.hour >= 12 && state.date.hour < 17) {
-                    return Text(
-                      "${AppLocalizations.of(context)!.good_afternoon}, \n${viewModel.name}",
-                      style: Theme.of(context).textTheme.headlineLarge,
-                    );
-                  } else {
-                    return Text(
-                      "${AppLocalizations.of(context)!.good_evening}, \n${viewModel.name}",
-                      style: Theme.of(context).textTheme.headlineLarge,
-                    );
-                  }
-                },
-              ),
+                backgroundColor: Theme.of(context).primaryColor,
+                child: Icon(
+                  Icons.add,
+                  color: Theme.of(context).cardColor,
+                  size: 40.r,
+                ),
+              );
+            } else {
+              return SizedBox();
+            }
+          },
+        ),
 
-              // date
-              BlocConsumer<HomeViewModel, HomeStates>(
-                listener: (context, state) async {
-                  if (state is HomeShowDatePickerState) {
-                    DateTime? pickedDate = await showDatePicker(
-                      context: context,
-                      firstDate: viewModel.selectedDate.subtract(
-                        Duration(days: 365),
-                      ),
-                      lastDate: viewModel.selectedDate.add(Duration(days: 365)),
-                      initialDate: viewModel.selectedDate,
+        body: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.all(32.r),
+            child: Column(
+              spacing: 16.h,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // welcome text
+                BlocSelector<HomeViewModel, HomeStates, HomeInitialState>(
+                  selector: (state) {
+                    return HomeInitialState(
+                      date: DateTime.now(),
+                      name: SharedPrefs.getPrefs().getData(key: 'name'),
                     );
-                    if (pickedDate != null) {
-                      viewModel.updateSelectedDate(pickedDate);
+                  },
+                  builder: (context, state) {
+                    if (state.date.hour > 0 && state.date.hour < 12) {
+                      return Text(
+                        "${AppLocalizations.of(context)!.good_morning}, \n${state.name}",
+                        style: Theme.of(context).textTheme.headlineLarge,
+                      );
+                    } else if (state.date.hour >= 12 && state.date.hour < 17) {
+                      return Text(
+                        "${AppLocalizations.of(context)!.good_afternoon}, \n${state.name}",
+                        style: Theme.of(context).textTheme.headlineLarge,
+                      );
+                    } else {
+                      return Text(
+                        "${AppLocalizations.of(context)!.good_evening}, \n${state.name}",
+                        style: Theme.of(context).textTheme.headlineLarge,
+                      );
                     }
-                  }
-                },
-                builder: (context, state) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      // back
-                      IconButton(
-                        onPressed: () {
-                          // go to previous date
-                          viewModel.goToPreviousDay();
-                        },
-                        icon: Icon(
-                          Icons.arrow_back_ios,
-                          color: Theme.of(context).primaryColorDark,
-                        ),
-                      ),
+                  },
+                ),
 
-                      // date
-                      GestureDetector(
-                        onLongPress: () {
-                          // open date picker
-                          viewModel.showDatePicker();
-                        },
-                        onDoubleTap: () {
-                          // return to today
-                          viewModel.returnToToday();
-                        },
-                        child: Text(
-                          DateFormat.MMMEd().format(viewModel.selectedDate),
-                          style: Theme.of(context).textTheme.bodyLarge,
+                // date
+                BlocConsumer<HomeViewModel, HomeStates>(
+                  listener: (context, state) async {
+                    if (state is HomeShowDatePickerState) {
+                      DateTime? pickedDate = await showDatePicker(
+                        // locale: Locale('ar'),
+                        context: context,
+                        firstDate: viewModel.selectedDate.subtract(
+                          Duration(days: 365),
                         ),
-                      ),
-                      // forward
-                      IconButton(
-                        onPressed: () {
-                          // go to next date
-                          viewModel.goToNextDay();
-                        },
-                        icon: Icon(
-                          Icons.arrow_forward_ios,
-                          color: Theme.of(context).primaryColorDark,
+                        lastDate: viewModel.selectedDate.add(
+                          Duration(days: 365),
                         ),
-                      ),
-                    ],
-                  );
-                },
-              ),
+                        initialDate: viewModel.selectedDate,
+                      );
+                      if (pickedDate != null) {
+                        viewModel.updateSelectedDate(pickedDate);
+                      }
+                    }
+                  },
+                  builder: (context, state) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        // back
+                        IconButton(
+                          onPressed: () {
+                            // go to previous date
+                            viewModel.goToPreviousDay();
+                          },
+                          icon: Icon(
+                            Icons.arrow_back_ios,
+                            color: Theme.of(context).primaryColorDark,
+                          ),
+                        ),
 
-              SizedBox(height: 22.h),
-
-              // tasks
-              BlocBuilder<HomeViewModel, HomeStates>(
-                buildWhen: (previous, current) => current is TasksStates,
-                builder: (context, state) {
-                  // no tasks
-                  if (state is NoTasksState) {
-                    return Expanded(
-                      child: Center(
-                        child: Text(
-                          "No Tasks for this day.",
-                          style: Theme.of(context).textTheme.bodyMedium,
+                        // date
+                        GestureDetector(
+                          onLongPress: () {
+                            // open date picker
+                            viewModel.showDatePicker();
+                          },
+                          onDoubleTap: () {
+                            // return to today
+                            viewModel.returnToToday();
+                          },
+                          child: Text(
+                            DateFormat.MMMEd(
+                              languageProvider.appLocale.languageCode,
+                            ).format(viewModel.selectedDate),
+                            style: Theme.of(context).textTheme.bodyLarge,
+                          ),
                         ),
-                      ),
+                        // forward
+                        IconButton(
+                          onPressed: () {
+                            // go to next date
+                            viewModel.goToNextDay();
+                          },
+                          icon: Icon(
+                            Icons.arrow_forward_ios,
+                            color: Theme.of(context).primaryColorDark,
+                          ),
+                        ),
+                      ],
                     );
-                  }
-                  // tasks
-                  else if (state is TasksSuccessState) {
-                    // viewModel.tasks.clear();
+                  },
+                ),
 
-                    return Expanded(
-                      child: ListView.separated(
-                        separatorBuilder:
-                            (context, index) => SizedBox(height: 20.h),
-                        itemCount: state.tasks.length,
-                        itemBuilder: (context, index) {
-                          return TaskWidget(task: state.tasks[index]);
-                        },
-                      ),
-                    );
-                  }
-                  // error
-                  else if (state is TasksErrorState) {
-                    return Expanded(
-                      child: Center(
-                        child: Text(
-                          state.errorMessage,
-                          style: Theme.of(context).textTheme.bodyMedium,
+                SizedBox(height: 22.h),
+
+                // tasks
+                BlocBuilder<HomeViewModel, HomeStates>(
+                  buildWhen: (previous, current) => current is TasksStates,
+                  builder: (context, state) {
+                    // no tasks
+                    if (state is NoTasksState) {
+                      return Expanded(
+                        child: Center(
+                          child: Text(
+                            "No Tasks for this day.",
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
                         ),
-                      ),
-                    );
-                  }
-                  // loading
-                  else {
-                    return Center(child: CircularProgressIndicator());
-                  }
+                      );
+                    }
+                    // tasks
+                    else if (state is TasksSuccessState) {
+                      return Expanded(
+                        child: ListView.separated(
+                          separatorBuilder:
+                              (context, index) => SizedBox(height: 20.h),
+                          itemCount: state.tasks.length,
+                          itemBuilder: (context, index) {
+                            return TaskWidget(task: state.tasks[index]);
+                          },
+                        ),
+                      );
+                    }
+                    // error
+                    else if (state is TasksErrorState) {
+                      return Expanded(
+                        child: Center(
+                          child: Text(
+                            state.errorMessage,
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
+                        ),
+                      );
+                    }
+                    // loading
+                    else {
+                      return Center(child: CircularProgressIndicator());
+                    }
 
-                  // return SizedBox();
-                },
-              ),
-            ],
+                    // return SizedBox();
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),

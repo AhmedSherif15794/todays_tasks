@@ -5,6 +5,7 @@ import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:todays_tasks/UI/create_task/create_task_view.dart';
+import 'package:todays_tasks/UI/edit_task/edit_task_view.dart';
 import 'package:todays_tasks/UI/home/cubit/home_view_model.dart';
 import 'package:todays_tasks/UI/onboarding/onboarding_view.dart';
 import 'package:todays_tasks/caching/shared_prefs.dart';
@@ -71,6 +72,7 @@ class MyApp extends StatelessWidget {
                       AppRoutes.homeView: (context) => HomeView(),
                       AppRoutes.onboarding: (context) => OnboardingView(),
                       AppRoutes.createTask: (context) => CreateTaskView(),
+                      AppRoutes.editTask: (context) => EditTaskView(),
                     },
                     initialRoute:
                         isOnboardingOpened

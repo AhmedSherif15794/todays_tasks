@@ -6,14 +6,14 @@ import 'package:todays_tasks/UI/home/cubit/home_view_model.dart';
 import 'package:todays_tasks/utils/app_colors.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class CreateTaskView extends StatefulWidget {
-  const CreateTaskView({super.key});
+class EditTaskView extends StatefulWidget {
+  const EditTaskView({super.key});
 
   @override
-  State<CreateTaskView> createState() => _CreateTaskViewState();
+  State<EditTaskView> createState() => _EditTaskViewState();
 }
 
-class _CreateTaskViewState extends State<CreateTaskView> {
+class _EditTaskViewState extends State<EditTaskView> {
   late final HomeViewModel homeViewModel;
   @override
   void initState() {
@@ -24,8 +24,8 @@ class _CreateTaskViewState extends State<CreateTaskView> {
 
   @override
   void dispose() {
-    homeViewModel.createTaskTitleController.clear();
-    homeViewModel.createTaskDescriptionController.clear();
+    homeViewModel.editTaskTitleController.clear();
+    homeViewModel.editTaskDescriptionController.clear();
     super.dispose();
   }
 
@@ -37,28 +37,24 @@ class _CreateTaskViewState extends State<CreateTaskView> {
         iconTheme: IconThemeData(color: Theme.of(context).primaryColorDark),
         centerTitle: true,
         title: Text(
-          AppLocalizations.of(context)!.create_task,
+          AppLocalizations.of(context)!.edit_task,
           style: Theme.of(context).textTheme.bodyLarge,
         ),
       ),
-
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: BlocBuilder<HomeViewModel, HomeStates>(
         builder: (context, state) {
-          if (state is GoTocreateView) {
+          if (state is GoToEditView) {
             // Save Edits
             return SizedBox(
               width: double.infinity,
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16.w),
-                child:
-                // save task
-                ElevatedButton(
+                child: ElevatedButton(
                   onPressed: () {
-                    homeViewModel.saveTask();
-                    // Navigator.pop(context);
+                    homeViewModel.editTask(state.task);
                   },
-                  child: Text(AppLocalizations.of(context)!.save_task),
+                  child: Text(AppLocalizations.of(context)!.save_edits),
                 ),
               ),
             );
@@ -68,12 +64,12 @@ class _CreateTaskViewState extends State<CreateTaskView> {
         },
       ),
       body: Form(
-        key: homeViewModel.createTaskFormKey,
+        key: homeViewModel.editTaskFormKey,
         child: Padding(
           padding: EdgeInsets.all(32.r),
           child: BlocListener<HomeViewModel, HomeStates>(
             listener: (context, state) {
-              if (state is TaskSuccessSavedState) {
+              if (state is TaskSuccessEditedState) {
                 // navigate to home screen
                 Navigator.pop(context);
               }
@@ -90,7 +86,7 @@ class _CreateTaskViewState extends State<CreateTaskView> {
                   ),
                   // enter your title
                   TextFormField(
-                    controller: homeViewModel.createTaskTitleController,
+                    controller: homeViewModel.editTaskTitleController,
                     style: Theme.of(context).textTheme.bodyMedium,
 
                     decoration: InputDecoration(
@@ -116,7 +112,7 @@ class _CreateTaskViewState extends State<CreateTaskView> {
                   ),
                   // descripe_your_task
                   TextFormField(
-                    controller: homeViewModel.createTaskDescriptionController,
+                    controller: homeViewModel.editTaskDescriptionController,
                     style: Theme.of(context).textTheme.bodyMedium,
                     maxLines: 6,
                     minLines: 3,

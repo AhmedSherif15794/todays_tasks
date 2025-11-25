@@ -6,7 +6,7 @@ import 'package:todays_tasks/models/task_model.dart';
 
 class TasksLocalDsImpl implements TasksLocalDS {
   @override
-  void editTasks({
+  void editTask({
     required TaskModel task,
     required String title,
     required String description,
@@ -69,6 +69,25 @@ class TasksLocalDsImpl implements TasksLocalDS {
       await box.put(formatedDate, tasks);
     } catch (e) {
       log('save tasks error : $e');
+      rethrow;
+    }
+  }
+
+  @override
+  void deleteTask(TaskModel task) async {
+    String formatedDate = task.date.toString().substring(0, 10);
+
+    try {
+      // open the box
+      var box = await Hive.openBox('tasks');
+      // get the list
+      List<TaskModel> tasks = box.get(formatedDate)?.cast<TaskModel>() ?? [];
+      // delete our task from the list
+      tasks.remove(task);
+      // replace the new list by the old one
+      await box.put(formatedDate, tasks);
+    } catch (e) {
+      log("delete task error:  $e");
       rethrow;
     }
   }
