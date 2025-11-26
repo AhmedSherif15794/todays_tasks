@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -59,10 +58,14 @@ class _TaskWidgetState extends State<TaskWidget> {
         trailing: PopupMenuButton(
           position: PopupMenuPosition.over,
           elevation: 22,
+
           // menuPadding: EdgeInsets.all(22.r),
           shape: BeveledRectangleBorder(
             borderRadius: BorderRadius.circular(12.r),
-            // side: BorderSide(color: Theme.of(context).primaryColorDark),
+
+            side: BorderSide(
+              color: Theme.of(context).primaryColorDark.withAlpha(20),
+            ),
           ),
           color: Theme.of(context).cardColor,
           iconColor: Theme.of(context).primaryColorDark,

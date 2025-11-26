@@ -35,7 +35,11 @@
     "descripe_your_task" : "Descripe your task(optional)",
     "save_task" : "Save Task",
     "save_edits" : "Save Edits",
-    "edit_task" : "Edit Task"
+    "edit_task" : "Edit Task",
+    "you_completed" : "You have completed",
+    "tasks" : "tasks",
+     "the_word_of"  :"of"
+    
 
 
 }

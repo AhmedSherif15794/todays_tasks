@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive/hive.dart';
-import 'package:intl/intl.dart';
+import 'package:intl/intl.dart' as intl;
 import 'package:provider/provider.dart';
 import 'package:todays_tasks/UI/home/cubit/home_states.dart';
 import 'package:todays_tasks/UI/home/cubit/home_view_model.dart';
@@ -13,6 +13,7 @@ import 'package:todays_tasks/caching/shared_prefs.dart';
 import 'package:todays_tasks/providers/app_language_provider.dart';
 import 'package:todays_tasks/utils/app_colors.dart';
 import 'package:todays_tasks/utils/app_routes.dart';
+// import 'package:Users\ahmed\AppData\Local\Pub\Cache\hosted\pub.dev\intl-0.19.0\lib\src\intl\text_direction.dart' as textdirection;
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -174,7 +175,7 @@ class _HomeViewState extends State<HomeView> {
                             viewModel.returnToToday();
                           },
                           child: Text(
-                            DateFormat.MMMEd(
+                            intl.DateFormat.MMMEd(
                               languageProvider.appLocale.languageCode,
                             ).format(viewModel.selectedDate),
                             style: Theme.of(context).textTheme.bodyLarge,
@@ -196,7 +197,50 @@ class _HomeViewState extends State<HomeView> {
                   },
                 ),
 
-                SizedBox(height: 22.h),
+                // completed bar
+                BlocBuilder<HomeViewModel, HomeStates>(
+                  buildWhen: (previous, current) => current is TasksStates,
+                  builder: (context, state) {
+                    if (state is TasksSuccessState) {
+                      int completedTasks =
+                          state.tasks
+                              .where((element) => element.isCompleted)
+                              .length;
+                      int allTasks = state.tasks.length;
+                      return Column(
+                        spacing: 16.h,
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 8.w),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Theme.of(
+                                    context,
+                                  ).primaryColorDark.withAlpha(80),
+                                ),
+                                borderRadius: BorderRadius.circular(16.r),
+                              ),
+                              child: LinearProgressIndicator(
+                                backgroundColor: Theme.of(context).cardColor,
+                                value: completedTasks / allTasks,
+                                borderRadius: BorderRadius.circular(16.r),
+                                color: Theme.of(context).primaryColor,
+                                minHeight: 18.h,
+                              ),
+                            ),
+                          ),
+                          Text(
+                            "${AppLocalizations.of(context)!.you_completed} $completedTasks ${AppLocalizations.of(context)!.the_word_of} $allTasks ${AppLocalizations.of(context)!.tasks}",
+                            style: Theme.of(context).textTheme.bodySmall,
+                          ),
+                        ],
+                      );
+                    } else {
+                      return SizedBox();
+                    }
+                  },
+                ),
 
                 // tasks
                 BlocBuilder<HomeViewModel, HomeStates>(

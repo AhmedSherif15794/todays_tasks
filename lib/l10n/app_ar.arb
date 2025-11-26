@@ -43,5 +43,11 @@
 
     "save_task" : "حفظ المهمة",
     "save_edits" : "حفظ التعديلات",
-    "edit_task" : "تعديل المهمة"
+    "edit_task" : "تعديل المهمة",
+    "you_completed" : "لقد اتممت",
+    "tasks" : "مهام",
+    "the_word_of"  :"من"
+    
+
+
 }
