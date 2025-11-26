@@ -1,27 +1,38 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPrefs {
-  late SharedPreferences prefs;
-
-  Future<void> init() async {
-    prefs = await SharedPreferences.getInstance();
+  static late SharedPreferences _prefs;
+  // private constructor
+  SharedPrefs._();
+  // initialize SharedPreferences instance
+  static Future<void> init() async {
+    _prefs = await SharedPreferences.getInstance();
   }
 
-  Future<void> setData({required String key, dynamic value}) async {
+  // get SharedPrefs instance
+  static SharedPrefs getPrefs() {
+    return SharedPrefs._();
+  }
+
+  Future<void> setData({required String key, required dynamic value}) async {
     if (value is String) {
-      await prefs.setString(key, value);
+      await _prefs.setString(key, value);
     } else if (value is bool) {
-      await prefs.setBool(key, value);
+      await _prefs.setBool(key, value);
     } else if (value is int) {
-      await prefs.setInt(key, value);
+      await _prefs.setInt(key, value);
     } else if (value is double) {
-      await prefs.setDouble(key, value);
+      await _prefs.setDouble(key, value);
     } else if (value is List<String>) {
-      await prefs.setStringList(key, value);
+      await _prefs.setStringList(key, value);
     }
   }
 
   dynamic getData({required String key}) {
-    return prefs.get(key);
+    return _prefs.get(key);
+  }
+
+  void deleteKey(String key) async {
+    await _prefs.remove(key);
   }
 }
