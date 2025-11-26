@@ -184,8 +184,12 @@ class HomeDrawer extends StatelessWidget {
             if (state is HomeDateChangeState) {
               Navigator.pop(context);
             }
+            if (state is HomeInitialState) {
+              Navigator.pop(context);
+            }
             if (state is ShowEditNameDialogState) {
               showDialog(
+                barrierDismissible: false,
                 context: context,
                 builder: (context) {
                   return AlertDialog(
@@ -257,7 +261,7 @@ class HomeDrawer extends StatelessWidget {
                             viewModel.editName(
                               viewModel.editNameController.text,
                             );
-                            Navigator.pop(context);
+                            // Navigator.pop(context);
                           },
                           style: TextButton.styleFrom(
                             padding: EdgeInsets.symmetric(
