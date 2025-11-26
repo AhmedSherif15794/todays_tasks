@@ -66,6 +66,19 @@ class MyApp extends StatelessWidget {
                         ),
                       ),
                   child: MaterialApp(
+                    builder: (context, child) {
+                      orientation = MediaQuery.of(context).orientation;
+
+                      double scale =
+                          orientation == Orientation.portrait ? 1.0 : 0.5;
+
+                      return MediaQuery(
+                        data: MediaQuery.of(
+                          context,
+                        ).copyWith(textScaler: TextScaler.linear(scale)),
+                        child: child!,
+                      );
+                    },
                     title: "Todays Tasks",
                     // routes
                     routes: {
