@@ -31,6 +31,7 @@
     "task_title" : "Task Title",
     "enter_task_title" : "Enter task title",
     "please_enter_task_title" : "Please enter the task title",
+    "no_tasks_for_today" : "No Tasks for this day",
     "description" : "Description",
     "descripe_your_task" : "Descripe your task(optional)",
     "save_task" : "Save Task",

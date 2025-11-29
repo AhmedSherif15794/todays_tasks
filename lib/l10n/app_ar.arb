@@ -37,6 +37,7 @@
     "task_title" : "عنوان المهمة",
     "enter_task_title" : "أدخل عنوان المهمة",
     "please_enter_task_title" : "من فضلك أدخل عنوان المهمة",
+    "no_tasks_for_today" : "لا توجد مهام لهذا اليوم",
 
     "description" : "الوصف",
     "descripe_your_task" : "اكتب وصفًا للمهمة (اختياري)",

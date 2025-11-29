@@ -251,7 +251,7 @@ class _HomeViewState extends State<HomeView> {
                       return Expanded(
                         child: Center(
                           child: Text(
-                            "No Tasks for this day.",
+                            AppLocalizations.of(context)!.no_tasks_for_today,
                             style: Theme.of(context).textTheme.bodyMedium,
                           ),
                         ),
