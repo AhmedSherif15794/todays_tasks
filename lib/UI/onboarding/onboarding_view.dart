@@ -79,157 +79,141 @@ class _OnboardingViewState extends State<OnboardingView>
                         borderRadius: BorderRadius.circular(12.r),
                         color: Theme.of(context).cardColor,
                       ),
-                      child: Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          spacing: 12.h,
-                          children: [
-                            // name
-                            Text(
-                              AppLocalizations.of(context)!.name,
-                              style: Theme.of(context).textTheme.bodyMedium!,
-                            ),
-                            // enter your name
-                            TextFormField(
-                              controller: viewModel.nameController,
-                              style: Theme.of(context).textTheme.bodyMedium,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        spacing: 12.h,
+                        children: [
+                          // name
+                          Text(
+                            AppLocalizations.of(context)!.name,
+                            style: Theme.of(context).textTheme.bodyMedium!,
+                          ),
+                          // enter your name
+                          TextFormField(
+                            controller: viewModel.nameController,
+                            style: Theme.of(context).textTheme.bodyMedium,
 
-                              decoration: InputDecoration(
-                                hintText:
-                                    AppLocalizations.of(
-                                      context,
-                                    )!.enter_your_name,
+                            decoration: InputDecoration(
+                              hintText:
+                                  AppLocalizations.of(context)!.enter_your_name,
+                            ),
+
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return AppLocalizations.of(
+                                  context,
+                                )!.please_enter_your_name;
+                              }
+                              return null;
+                            },
+                          ),
+
+                          Divider(),
+
+                          // theme & language
+                          Text(
+                            AppLocalizations.of(context)!.choose_your_settings,
+                            style: Theme.of(context).textTheme.bodySmall!,
+                          ),
+
+                          // theme
+                          Row(
+                            spacing: 10.w,
+                            children: [
+                              // theme Icon
+                              SvgPicture.asset(
+                                AppAssets.themeIcon,
+                                width: 20.w,
+                                height: 20.h,
+                                colorFilter: ColorFilter.mode(
+                                  Theme.of(context).primaryColorDark,
+                                  BlendMode.srcIn,
+                                ),
                               ),
 
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return AppLocalizations.of(
-                                    context,
-                                  )!.please_enter_your_name;
-                                }
-                                return null;
-                              },
-                            ),
+                              // theme
+                              Text(
+                                AppLocalizations.of(context)!.theme,
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
 
-                            Divider(),
-
-                            // theme & language
-                            Text(
-                              AppLocalizations.of(
-                                context,
-                              )!.choose_your_settings,
-                              style: Theme.of(context).textTheme.bodySmall!,
-                            ),
-
-                            // theme
-                            Row(
-                              spacing: 10.w,
-                              children: [
-                                // theme Icon
-                                SvgPicture.asset(
-                                  AppAssets.themeIcon,
-                                  width: 20.w,
-                                  height: 20.h,
-                                  colorFilter: ColorFilter.mode(
-                                    Theme.of(context).primaryColorDark,
-                                    BlendMode.srcIn,
-                                  ),
+                              Spacer(),
+                              // select theme
+                              TextButton(
+                                onPressed: () {
+                                  viewModel.showThemeBottomSheet();
+                                },
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  spacing: 32.w,
+                                  children: [
+                                    Text(
+                                      themeProvider.isDarkMode()
+                                          ? AppLocalizations.of(context)!.dark
+                                          : AppLocalizations.of(context)!.light,
+                                      style:
+                                          Theme.of(context).textTheme.bodySmall,
+                                    ),
+                                    Icon(
+                                      Icons.arrow_drop_down,
+                                      color: Theme.of(context).primaryColorDark,
+                                    ),
+                                  ],
                                 ),
+                              ),
+                            ],
+                          ),
 
-                                // theme
-                                Text(
-                                  AppLocalizations.of(context)!.theme,
-                                  style: Theme.of(context).textTheme.bodySmall,
+                          // language
+                          Row(
+                            spacing: 10.w,
+                            children: [
+                              // language Icon
+                              SvgPicture.asset(
+                                AppAssets.languageIcon,
+                                width: 20.w,
+                                height: 20.h,
+                                colorFilter: ColorFilter.mode(
+                                  Theme.of(context).primaryColorDark,
+                                  BlendMode.srcIn,
                                 ),
+                              ),
 
-                                Spacer(),
-                                // select theme
-                                TextButton(
-                                  onPressed: () {
-                                    viewModel.showThemeBottomSheet();
-                                  },
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    spacing: 32.w,
-                                    children: [
-                                      Text(
-                                        themeProvider.isDarkMode()
-                                            ? AppLocalizations.of(context)!.dark
-                                            : AppLocalizations.of(
-                                              context,
-                                            )!.light,
-                                        style:
-                                            Theme.of(
-                                              context,
-                                            ).textTheme.bodySmall,
-                                      ),
-                                      Icon(
-                                        Icons.arrow_drop_down,
-                                        color:
-                                            Theme.of(context).primaryColorDark,
-                                      ),
-                                    ],
-                                  ),
+                              // theme
+                              Text(
+                                AppLocalizations.of(context)!.language,
+                                style: Theme.of(context).textTheme.bodySmall,
+                              ),
+                              Spacer(),
+                              // select language
+                              TextButton(
+                                onPressed: () {
+                                  // show language bottom sheet
+                                  viewModel.showLanguageBottomSheet();
+                                },
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  spacing: 32.w,
+                                  children: [
+                                    Text(
+                                      languageProvider.isArabic()
+                                          ? AppLocalizations.of(context)!.arabic
+                                          : AppLocalizations.of(
+                                            context,
+                                          )!.english,
+                                      style:
+                                          Theme.of(context).textTheme.bodySmall,
+                                    ),
+                                    Icon(
+                                      Icons.arrow_drop_down,
+                                      color: Theme.of(context).primaryColorDark,
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-
-                            // language
-                            Row(
-                              spacing: 10.w,
-                              children: [
-                                // language Icon
-                                SvgPicture.asset(
-                                  AppAssets.languageIcon,
-                                  width: 20.w,
-                                  height: 20.h,
-                                  colorFilter: ColorFilter.mode(
-                                    Theme.of(context).primaryColorDark,
-                                    BlendMode.srcIn,
-                                  ),
-                                ),
-
-                                // theme
-                                Text(
-                                  AppLocalizations.of(context)!.language,
-                                  style: Theme.of(context).textTheme.bodySmall,
-                                ),
-                                Spacer(),
-                                // select language
-                                TextButton(
-                                  onPressed: () {
-                                    // show language bottom sheet
-                                    viewModel.showLanguageBottomSheet();
-                                  },
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    spacing: 32.w,
-                                    children: [
-                                      Text(
-                                        languageProvider.isArabic()
-                                            ? AppLocalizations.of(
-                                              context,
-                                            )!.arabic
-                                            : AppLocalizations.of(
-                                              context,
-                                            )!.english,
-                                        style:
-                                            Theme.of(
-                                              context,
-                                            ).textTheme.bodySmall,
-                                      ),
-                                      Icon(
-                                        Icons.arrow_drop_down,
-                                        color:
-                                            Theme.of(context).primaryColorDark,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
 
